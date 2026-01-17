@@ -1,3 +1,5 @@
+"use client";
+
 import { Search, SlidersHorizontal, Bell, Menu, X, ArrowRight, Shield, Users, Heart, Sparkles, Globe } from "lucide-react";
 import { Event } from "../types";
 import { EventCard } from "./EventCard";
@@ -11,6 +13,7 @@ interface DiscoverScreenProps {
 
 export function DiscoverScreen({ events, onEventClick }: DiscoverScreenProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
   const { scrollY } = useScroll();
   const headerBackgroundOpacity = useTransform(scrollY, [0, 50], [0, 0.9]);
   const headerBlur = useTransform(scrollY, [0, 50], [0, 12]);
@@ -61,12 +64,18 @@ export function DiscoverScreen({ events, onEventClick }: DiscoverScreenProps) {
 
           {/* Auth Buttons */}
           <div className="hidden md:flex items-center gap-4">
-            <button className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors">
+            <a 
+              href="/login"
+              className="text-sm font-medium text-gray-600 hover:text-gray-900 transition-colors"
+            >
               Log In
-            </button>
-            <button className="px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all shadow-sm hover:shadow-md">
+            </a>
+            <a 
+              href="/signup"
+              className="px-5 py-2.5 bg-gray-900 text-white text-sm font-medium rounded-full hover:bg-gray-800 transition-all shadow-sm hover:shadow-md"
+            >
               Sign Up
-            </button>
+            </a>
           </div>
 
           {/* Mobile Menu Toggle */}
@@ -92,8 +101,18 @@ export function DiscoverScreen({ events, onEventClick }: DiscoverScreenProps) {
               <a href="#" className="text-lg font-medium text-gray-900">Community</a>
               <a href="#" className="text-lg font-medium text-gray-900">About</a>
               <div className="h-px bg-gray-100 my-2" />
-              <button className="w-full py-3 text-center font-medium text-gray-600 bg-gray-50 rounded-xl">Log In</button>
-              <button className="w-full py-3 text-center font-medium text-white bg-gray-900 rounded-xl">Sign Up</button>
+              <a 
+                href="/login"
+                className="block w-full py-3 text-center font-medium text-gray-600 bg-gray-50 rounded-xl"
+              >
+                Log In
+              </a>
+              <a 
+                href="/signup"
+                className="block w-full py-3 text-center font-medium text-white bg-gray-900 rounded-xl"
+              >
+                Sign Up
+              </a>
             </motion.div>
           )}
         </AnimatePresence>

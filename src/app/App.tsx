@@ -8,6 +8,8 @@ import { CreateEventScreen } from "./components/CreateEventScreen";
 import { EventDetailScreen } from "./components/EventDetailScreen";
 import { ProfileScreen } from "./components/ProfileScreen";
 import { MessagesScreen } from "./components/MessagesScreen";
+import {LoginForm} from "./components/auth/LoginForm";
+import {SignupForm} from "./components/auth/SignupForm";
 
 function EventDetailWrapper() {
   const { id } = useParams();
@@ -32,7 +34,8 @@ function AppContent() {
       navigate("/");
     } else if (screen === "create") {
       navigate("/create");
-    } else {
+    } 
+    else {
       navigate(`/${screen}`);
     }
   };
@@ -45,6 +48,8 @@ function AppContent() {
     if (path === "/create") return "create";
     return "discover";
   };
+
+  const showBottomNav = !["/login", "/signup"].includes(location.pathname);
 
   return (
     <div className="min-h-screen bg-white">
@@ -67,12 +72,14 @@ function AppContent() {
             path="/create"
             element={<CreateEventScreen onBack={() => navigate(-1)} />}
           />
+          <Route path="/login" element={<LoginForm />} />
+          <Route path="/signup" element={<SignupForm />} />
           <Route path="/event/:id" element={<EventDetailWrapper />} />
         </Routes>
       </main>
 
       {/* Bottom Navigation */}
-      <BottomNav activeScreen={getActiveScreen()} onNavigate={handleNavigate} />
+      {showBottomNav && <BottomNav activeScreen={getActiveScreen()} onNavigate={handleNavigate} />}
     </div>
   );
 }
