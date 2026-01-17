@@ -10,6 +10,10 @@ import { ProfileScreen } from "./components/ProfileScreen";
 import { MessagesScreen } from "./components/MessagesScreen";
 import {LoginForm} from "./components/auth/LoginForm";
 import {SignupForm} from "./components/auth/SignupForm";
+import { DiscoverInfoPage } from "./components/DiscoverInfoPage";
+import { CreateEventInfoPage } from "./components/CreateEventInfoPage";
+import { CommunityPage } from "./components/CommunityPage";
+import { AboutPage } from "./components/AboutPage";
 
 function EventDetailWrapper() {
   const { id } = useParams();
@@ -49,12 +53,15 @@ function AppContent() {
     return "discover";
   };
 
-  const showBottomNav = !["/login", "/signup"].includes(location.pathname);
+  // Hide bottom nav on auth pages and marketing pages
+  const showBottomNav = !["/login", "/signup", "/discover", "/create-event", "/community", "/about"].includes(
+    location.pathname
+  );
 
   return (
     <div className="min-h-screen bg-white">
       {/* Main Content */}
-      <main className="max-w-lg mx-auto">
+      <main className="w-full max-w-[1200px] mx-auto">
         <Routes>
           <Route
             path="/"
@@ -75,6 +82,10 @@ function AppContent() {
           <Route path="/login" element={<LoginForm />} />
           <Route path="/signup" element={<SignupForm />} />
           <Route path="/event/:id" element={<EventDetailWrapper />} />
+          <Route path="/discover" element={<DiscoverInfoPage />} />
+          <Route path="/create-event" element={<CreateEventInfoPage />} />
+          <Route path="/community" element={<CommunityPage />} />
+          <Route path="/about" element={<AboutPage />} />
         </Routes>
       </main>
 

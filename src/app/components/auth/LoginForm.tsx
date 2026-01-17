@@ -1,6 +1,7 @@
 "use client";
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { Input } from './Input';
 
 export function LoginForm() {
@@ -10,7 +11,7 @@ export function LoginForm() {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-5">
+    <form onSubmit={handleSubmit} className="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-white p-8 rounded-3xl shadow-xl flex flex-col gap-5">
       <Input
         label="Username"
         id="login-username"
@@ -36,12 +37,12 @@ export function LoginForm() {
 
       <p className="text-center text-sm text-gray-600">
         Don't have an account?{' '}
-        <a
-          href="/signup"
+        <Link
+          to="/signup"
           className="font-semibold text-rose-500 hover:text-rose-600 transition-colors"
         >
           Sign up
-        </a>
+        </Link>
       </p>
     </form>
   );
