@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Coffee, Sparkles } from "lucide-react";
 
 interface CreateEventScreenProps {
   onBack: () => void;
 }
 
 export function CreateEventScreen({ onBack }: CreateEventScreenProps) {
+  const [eventType, setEventType] = useState<'standard' | 'eventchen'>('standard');
   const [formData, setFormData] = useState({
     title: "",
     category: "",
@@ -26,6 +27,14 @@ export function CreateEventScreen({ onBack }: CreateEventScreenProps) {
     "Creative",
     "Professional",
     "Other",
+  ];
+
+  const eventchenVibes = [
+    "☕ Coffee",
+    "🚶 Walk",
+    "🌇 Sunset",
+    "📚 Study",
+    "💬 Deep Talk",
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -51,18 +60,42 @@ export function CreateEventScreen({ onBack }: CreateEventScreenProps) {
         </div>
       </div>
 
+      {/* Event Type Toggle */}
+      <div className="px-4 pt-2 pb-4">
+        <div className="bg-gray-100 p-1 rounded-xl flex">
+          <button
+            onClick={() => setEventType('standard')}
+            className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${eventType === 'standard' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'}`}
+          >
+            Standard Event
+          </button>
+          <button
+            onClick={() => setEventType('eventchen')}
+            className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-1.5 ${eventType === 'eventchen' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500'}`}
+          >
+            <Sparkles className="w-3 h-3" />
+            Eventchen
+          </button>
+        </div>
+        {eventType === 'eventchen' && (
+          <p className="text-xs text-center text-gray-500 mt-2">
+            Small, spontaneous, max 4 people. No pressure.
+          </p>
+        )}
+      </div>
+
       {/* Form */}
       <form onSubmit={handleSubmit} className="px-4 py-6 space-y-5">
         {/* Title */}
         <div>
-          <label className="block text-sm mb-2">Event Title</label>
+          <label className="block text-sm mb-2">{eventType === 'eventchen' ? 'What are we doing?' : 'Event Title'}</label>
           <input
             type="text"
             value={formData.title}
             onChange={(e) =>
               setFormData({ ...formData, title: e.target.value })
             }
-            placeholder="e.g. Sunday Brunch Meetup"
+            placeholder={eventType === 'eventchen' ? "e.g. Quick coffee at Joe's" : "e.g. Sunday Brunch Meetup"}
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
@@ -70,7 +103,7 @@ export function CreateEventScreen({ onBack }: CreateEventScreenProps) {
 
         {/* Category */}
         <div>
-          <label className="block text-sm mb-2">Category</label>
+          <label className="block text-sm mb-2">{eventType === 'eventchen' ? 'Vibe' : 'Category'}</label>
           <select
             value={formData.category}
             onChange={(e) =>
@@ -79,8 +112,8 @@ export function CreateEventScreen({ onBack }: CreateEventScreenProps) {
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           >
-            <option value="">Select a category</option>
-            {categories.map((cat) => (
+            <option value="">{eventType === 'eventchen' ? 'Select a vibe' : 'Select a category'}</option>
+            {(eventType === 'eventchen' ? eventchenVibes : categories).map((cat) => (
               <option key={cat} value={cat}>
                 {cat}
               </option>
@@ -145,15 +178,16 @@ export function CreateEventScreen({ onBack }: CreateEventScreenProps) {
             onChange={(e) =>
               setFormData({ ...formData, capacity: e.target.value })
             }
-            placeholder="Max attendees"
+            placeholder={eventType === 'eventchen' ? "Max 4 people" : "Max attendees"}
             min="2"
-            max="50"
+            max={eventType === 'eventchen' ? "4" : "500"}
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             required
           />
         </div>
 
         {/* Public / Private */}
+        {eventType === 'standard' && (
         <div>
           <label className="block text-sm mb-3">Event Type</label>
           <div className="flex gap-3">
@@ -181,8 +215,10 @@ export function CreateEventScreen({ onBack }: CreateEventScreenProps) {
             </button>
           </div>
         </div>
+        )}
 
         {/* Price */}
+        {eventType === 'standard' && (
         <div>
           <label className="block text-sm mb-2">Price</label>
           <input
@@ -195,16 +231,17 @@ export function CreateEventScreen({ onBack }: CreateEventScreenProps) {
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
+        )}
 
         {/* Description */}
         <div>
-          <label className="block text-sm mb-2">Description</label>
+          <label className="block text-sm mb-2">{eventType === 'eventchen' ? 'Quick Note' : 'Description'}</label>
           <textarea
             value={formData.description}
             onChange={(e) =>
               setFormData({ ...formData, description: e.target.value })
             }
-            placeholder="Tell people what to expect..."
+            placeholder={eventType === 'eventchen' ? "Where exactly? How long?" : "Tell people what to expect..."}
             rows={4}
             className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
             required
@@ -214,9 +251,9 @@ export function CreateEventScreen({ onBack }: CreateEventScreenProps) {
         {/* Submit Button */}
         <button
           type="submit"
-          className="w-full bg-blue-600 text-white py-4 rounded-xl hover:bg-blue-700 transition-colors"
+          className={`w-full text-white py-4 rounded-xl transition-colors ${eventType === 'eventchen' ? 'bg-gradient-to-r from-pink-500 to-rose-500 hover:from-pink-600 hover:to-rose-600 shadow-lg shadow-pink-200' : 'bg-blue-600 hover:bg-blue-700'}`}
         >
-          Create Event
+          {eventType === 'eventchen' ? 'Spark Eventchen ✨' : 'Create Event'}
         </button>
       </form>
     </div>

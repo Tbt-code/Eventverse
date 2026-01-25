@@ -6,6 +6,7 @@ import { DiscoverScreen } from "./components/DiscoverScreen";
 import { MapScreen } from "./components/MapScreen";
 import { CreateEventScreen } from "./components/CreateEventScreen";
 import { EventDetailScreen } from "./components/EventDetailScreen";
+import { FriendsMap } from "./components/FriendsMap";
 import { ProfileScreen } from "./components/ProfileScreen";
 import { MessagesScreen } from "./components/MessagesScreen";
 import {LoginForm} from "./components/auth/LoginForm";
@@ -33,7 +34,7 @@ function AppContent() {
     navigate(`/event/${eventId}`);
   };
 
-  const handleNavigate = (screen: Screen) => {
+  const handleNavigate = (screen: Screen | 'friends') => {
     if (screen === "discover") {
       navigate("/");
     } else if (screen === "create") {
@@ -44,9 +45,10 @@ function AppContent() {
     }
   };
 
-  const getActiveScreen = (): Screen => {
+  const getActiveScreen = (): Screen | 'friends' => {
     const path = location.pathname;
     if (path === "/map") return "map";
+    if (path === "/friends") return "friends";
     if (path === "/messages") return "messages";
     if (path === "/profile") return "profile";
     if (path === "/create") return "create";
@@ -73,6 +75,7 @@ function AppContent() {
             path="/map"
             element={<MapScreen events={mockEvents} onEventClick={handleEventClick} />}
           />
+          <Route path="/friends" element={<FriendsMap />} />
           <Route path="/messages" element={<MessagesScreen />} />
           <Route path="/profile" element={<ProfileScreen user={currentUser} />} />
           <Route

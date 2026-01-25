@@ -1,7 +1,8 @@
 import { useState } from "react";
-import { BadgeCheck, Calendar, Users, Award, Settings, Heart, Image as ImageIcon } from "lucide-react";
+import { BadgeCheck, Calendar, Users, Award, Settings, Heart, Image as ImageIcon, Sparkles, Shield, Eye, Map as MapIcon, X, Palette } from "lucide-react";
 import { User } from "../types";
 import { motion, AnimatePresence, Variants } from "framer-motion";
+import { AvatarDesigner } from "./AvatarDesigner";
 
 interface ProfileScreenProps {
   user: User;
@@ -9,6 +10,8 @@ interface ProfileScreenProps {
 
 export function ProfileScreen({ user }: ProfileScreenProps) {
   const [activeTab, setActiveTab] = useState<'events' | 'moments'>('events');
+  const [showSettings, setShowSettings] = useState(false);
+  const [showAvatarDesigner, setShowAvatarDesigner] = useState(false);
 
   const gridVariants: Variants = {
     hidden: { opacity: 0 },
@@ -71,7 +74,16 @@ export function ProfileScreen({ user }: ProfileScreenProps) {
           <button className="flex-1 flex items-center justify-center gap-2 bg-white text-gray-700 font-semibold py-2.5 rounded-lg border border-gray-200 hover:bg-gray-50 transition-colors">
             Edit Profile
           </button>
-          <button className="flex items-center justify-center p-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors">
+          <button 
+            onClick={() => setShowAvatarDesigner(true)}
+            className="flex items-center justify-center p-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+          >
+            <Palette className="w-5 h-5 text-gray-600" />
+          </button>
+          <button 
+            onClick={() => setShowSettings(true)}
+            className="flex items-center justify-center p-2.5 rounded-lg border border-gray-200 text-gray-600 hover:bg-gray-50 transition-colors"
+          >
             <Settings className="w-5 h-5 text-gray-600" />
           </button>
         </div>
@@ -116,7 +128,7 @@ export function ProfileScreen({ user }: ProfileScreenProps) {
         {/* Right Column: Content */}
         <div className="bg-white rounded-3xl p-6 md:p-8 md:-mt-20 md:shadow-sm md:border border-gray-100 min-h-[500px]">
         {/* Stats */}
-        <div className="grid grid-cols-3 gap-3 mb-8 md:mb-12">
+        <div className="grid grid-cols-4 gap-2 mb-8 md:mb-12">
           <div className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100 hover:bg-blue-50 transition-colors cursor-pointer group">
             <div className="flex items-center justify-center gap-2 mb-2">
               <Calendar className="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform" />
@@ -130,6 +142,13 @@ export function ProfileScreen({ user }: ProfileScreenProps) {
             </div>
             <p className="text-2xl font-bold mb-1 text-gray-900">{user.eventsAttended}</p>
             <p className="text-sm text-gray-600">Events Attended</p>
+          </div>
+          <div className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Sparkles className="w-5 h-5 text-amber-500" />
+            </div>
+            <p className="text-2xl font-bold mb-1 text-gray-900">42</p>
+            <p className="text-sm text-gray-600">Eventchens</p>
           </div>
           <div className="bg-gray-50 rounded-2xl p-4 text-center border border-gray-100">
             <div className="flex items-center justify-center gap-2 mb-2">
@@ -252,6 +271,86 @@ export function ProfileScreen({ user }: ProfileScreenProps) {
       </div>
       </div>
       </div>
+
+      {/* Settings Modal */}
+      <AnimatePresence>
+        {showSettings && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-end md:items-center justify-center p-4"
+            onClick={() => setShowSettings(false)}
+          >
+            <motion.div
+              initial={{ y: 100 }}
+              animate={{ y: 0 }}
+              exit={{ y: 100 }}
+              className="bg-white w-full max-w-md rounded-3xl p-6"
+              onClick={e => e.stopPropagation()}
+            >
+              <div className="flex items-center justify-between mb-6">
+                <h3 className="text-xl font-bold">Privacy & Settings</h3>
+                <button onClick={() => setShowSettings(false)} className="p-2 hover:bg-gray-100 rounded-full">
+                  <X className="w-5 h-5" />
+                </button>
+              </div>
+
+              <div className="space-y-6">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-purple-50 text-purple-600 rounded-lg"><Eye className="w-5 h-5" /></div>
+                    <div>
+                      <p className="font-semibold">Ghost Mode</p>
+                      <p className="text-xs text-gray-500">Hide location from everyone</p>
+                    </div>
+                  </div>
+                  <div className="w-12 h-6 bg-gray-200 rounded-full relative cursor-pointer"><div className="absolute left-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div></div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-blue-50 text-blue-600 rounded-lg"><MapIcon className="w-5 h-5" /></div>
+                    <div>
+                      <p className="font-semibold">Map Appearance</p>
+                      <p className="text-xs text-gray-500">Use Avatar instead of Photo</p>
+                    </div>
+                  </div>
+                  <div className="w-12 h-6 bg-blue-600 rounded-full relative cursor-pointer"><div className="absolute right-1 top-1 w-4 h-4 bg-white rounded-full shadow-sm"></div></div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-3">
+                    <div className="p-2 bg-green-50 text-green-600 rounded-lg"><Shield className="w-5 h-5" /></div>
+                    <div>
+                      <p className="font-semibold">Profile Visibility</p>
+                      <p className="text-xs text-gray-500">Friends Only</p>
+                    </div>
+                  </div>
+                  <span className="text-sm font-medium text-gray-500">Edit</span>
+                </div>
+              </div>
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      {/* Avatar Designer Modal */}
+      <AnimatePresence>
+        {showAvatarDesigner && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center p-4"
+            onClick={() => setShowAvatarDesigner(false)}
+          >
+            <div onClick={e => e.stopPropagation()}>
+              <AvatarDesigner onClose={() => setShowAvatarDesigner(false)} onSave={() => setShowAvatarDesigner(false)} />
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

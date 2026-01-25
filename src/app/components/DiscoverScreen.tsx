@@ -14,6 +14,7 @@ interface DiscoverScreenProps {
 
 export function DiscoverScreen({ events, onEventClick }: DiscoverScreenProps) {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [discoveryMode, setDiscoveryMode] = useState<'events' | 'eventchens'>('events');
 
   const { scrollY } = useScroll();
   const headerBackgroundOpacity = useTransform(scrollY, [0, 50], [0, 0.9]);
@@ -245,6 +246,23 @@ export function DiscoverScreen({ events, onEventClick }: DiscoverScreenProps) {
               </div>
             </div>
 
+            {/* Mode Toggle */}
+            <div className="bg-gray-100 p-1 rounded-xl flex mb-6">
+              <button
+                onClick={() => setDiscoveryMode('events')}
+                className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all ${discoveryMode === 'events' ? 'bg-white shadow-sm text-gray-900' : 'text-gray-500'}`}
+              >
+                Events
+              </button>
+              <button
+                onClick={() => setDiscoveryMode('eventchens')}
+                className={`flex-1 py-2 rounded-lg text-sm font-semibold transition-all flex items-center justify-center gap-1.5 ${discoveryMode === 'eventchens' ? 'bg-white shadow-sm text-blue-600' : 'text-gray-500'}`}
+              >
+                <Sparkles className="w-3 h-3" />
+                Eventchens
+              </button>
+            </div>
+
             {/* Categories List */}
             <div>
               <h3 className="text-xs font-bold text-gray-400 uppercase tracking-wider mb-3 px-2">Categories</h3>
@@ -262,8 +280,8 @@ export function DiscoverScreen({ events, onEventClick }: DiscoverScreenProps) {
           <div>
             <div className="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
               <div>
-                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">Trending Near You</h2>
-                <p className="text-gray-600">Join people discovering events through friends, not algorithms.</p>
+                <h2 className="text-2xl md:text-3xl font-bold text-gray-900 mb-2">{discoveryMode === 'eventchens' ? 'Small Moments Nearby' : 'Trending Near You'}</h2>
+                <p className="text-gray-600">{discoveryMode === 'eventchens' ? 'Spontaneous hangouts with friends.' : 'Join people discovering events through friends, not algorithms.'}</p>
               </div>
               
               {/* Mobile Search/Filter (Hidden on Desktop) */}
